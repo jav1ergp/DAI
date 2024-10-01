@@ -1,0 +1,17 @@
+{
+  "name": "practica-dai-1",
+  "version": "1.0",
+  "author": "Yo",
+  "description": "Para llenar la BD con datos de prueba",
+  "main": "seed.js",
+  "type": "module",
+  "scripts": {
+    "seed": "node  --env-file=.env seed.js",
+    "indices": "node  --env-file=.env indices.js",
+    "consultas": "node  --env-file=.env consultas.js"
+  },
+  "devDependencies": {
+    "@types/node": "^22.7.4",
+    "mongodb": "^6.9.0"
+  }
+}

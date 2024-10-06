@@ -31,6 +31,32 @@ async function Inserta_datos_en_colección (colección, url) {
       throw err    
   }
 }
+
+import axios from 'axios'; // Para hacer peticiones HTTP
+import fs from 'fs'; // Trabajar con rchivos
+import path from 'path'; // Rutas de archivos
+
+async function descargarProductosConImagenes(apiUrl) {
+  const imageFolder = path.join(process.cwd(), 'images'); // Usa el directorio actual de trabajo
+  if (!fs.existsSync(imageFolder)) fs.mkdirSync(imageFolder); // Crear carpeta si no existe
+
+  try {
+    const { data: productos } = await axios.get(apiUrl); // Petición a la API
+
+    productos.forEach(async (producto) => {
+      const nombreArchivo = `${producto.title.replace(/[^a-z0-9]/gi, '_').toLowerCase()}.jpg`;
+      const rutaCompleta = path.join(imageFolder, nombreArchivo);
+
+      const writer = fs.createWriteStream(rutaCompleta);
+      const imgResponse = await axios.get(producto.image, { responseType: 'stream' });
+
+      imgResponse.data.pipe(writer);
+      writer.on('finish', () => console.log(`Imagen de ${producto.title} guardada como ${nombreArchivo}`));
+    });
+  } catch (error) {
+    console.error('Error al obtener productos o imágenes:', error);
+  }
+}
   
 // Inserción consecutiva
 Inserta_datos_en_colección('productos', 'https://fakestoreapi.com/products')
@@ -41,3 +67,4 @@ Inserta_datos_en_colección('productos', 'https://fakestoreapi.com/products')
   
 
 console.log('Lo primero que pasa')
+descargarProductosConImagenes('https://fakestoreapi.com/products');

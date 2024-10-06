@@ -1,82 +1,81 @@
-import { MongoClient } from 'mongodb'
+import { MongoClient } from 'mongodb';
 
-console.log( '🏁 consultas.js ----------------->')
+console.log('🏁 consultas.js ----------------->');
 
 const USER_DB = process.env.USER_DB
 const PASS    = process.env.PASS
-  
-const url    = `mongodb://${USER_DB}:${PASS}@localhost:27017`
-const client = new MongoClient(url);
 
+const url    = `mongodb://${USER_DB}:${PASS}@localhost:27017`;
+const client = new MongoClient(url);
 const dbName = 'myProject';
 
-async function Productos100(){
-    await client.connect(); // Conexion db
-    const db = client.db(dbName); 
-    const col_productos = db.collection('productos'); // Coleccion productos
-
-    const productos100 = await col_productos.find({price: {$gt: 100}}).toArray();
-    console.log('Productos de mas de 100$: ', productos100);
-    await client.close();
+async function conectarDB() {
+    try {
+        await client.connect(); // Conectar a la base de datos
+        console.log('Conexión exitosa a la base de datos.');
+        return client.db(dbName);
+    } catch (err) {
+        console.error('Error al conectar a la base de datos:', err);
+        throw err;
+    }
 }
 
-async function ProductosWinter() {
-    await client.connect(); // Conexion db
-    const db = client.db(dbName); 
-    const col_productos = db.collection('productos'); // Coleccion productos
-
-    const productos_winter = await col_productos.find({description: /winter/i}).sort({price: 1}).toArray();
-    console.log('Productos que contienen winter en la descripcion, ordenados por precio: ', productos_winter);
-    await client.close();
+async function cerrarDB() {
+    await client.close(); // Cerrar la conexión a la base de datos
+    console.log('Conexión cerrada.');
 }
 
-async function ProductosJoyeria() {
-    await client.connect(); // Conexion db
-    const db = client.db(dbName); 
-    const col_productos = db.collection('productos'); // Coleccion productos
-
-    const productos_joyeria = await col_productos.find({category: 'jewelery'}).sort({'rating.rate': 1}).toArray();
-    console.log('Productos de joyeria ordenados por rating: ', productos_joyeria);
-    await client.close();
+async function Productos100(db) {
+    const col_productos = db.collection('productos'); // Colección productos
+    const productos100 = await col_productos.find({ price: { $gt: 100 } }).toArray();
+    console.log('Productos de más de 100$: ', productos100);
 }
 
-async function TotalReseñas() {
-    await client.connect(); // Conexion db
-    const db = client.db(dbName); 
-    const col_productos = db.collection('productos'); // Coleccion productos
+async function ProductosWinter(db) {
+    const col_productos = db.collection('productos'); // Colección productos
+    const productos_winter = await col_productos.find({ description: /winter/i }).sort({ price: 1 }).toArray();
+    console.log('Productos que contienen winter en la descripción, ordenados por precio: ', productos_winter);
+}
 
-    const reseñas = await col_productos.aggregate([
-                            {$group: {_id:null, total_reseñas: {$sum: '$rating.count'} } }]).toArray() //suma
+async function ProductosJoyeria(db) {
+    const col_productos = db.collection('productos'); // Colección productos
+    const productos_joyeria = await col_productos.find({ category: 'jewelery' }).sort({ 'rating.rate': 1 }).toArray();
+    console.log('Productos de joyería ordenados por rating: ', productos_joyeria);
+}
+
+async function TotalReseñas(db) {
+    const col_productos = db.collection('productos'); // Colección productos
+    const reseñas = await col_productos.aggregate([{ $group: { _id: null, total_reseñas: { $sum: '$rating.count' } } }]).toArray();
     console.log('Total de reseñas: ', reseñas);
-    await client.close();
-    
 }
 
-async function RatingMedio() {
-    await client.connect(); // Conexion db
-    const db = client.db(dbName); 
-    const col_productos = db.collection('productos'); // Coleccion productos
-
-    const rating_medio = await col_productos.aggregate([
-                            {$group: {_id:'$category', media_rating: {$avg: '$rating.rate'} } }]).toArray() //media
-    console.log('Puntuacion media por categoria: ', rating_medio);
-    await client.close();
+async function RatingMedio(db) {
+    const col_productos = db.collection('productos'); // Colección productos
+    const rating_medio = await col_productos.aggregate([{ $group: { _id: '$category', media_rating: { $avg: '$rating.rate' } } }]).toArray();
+    console.log('Puntuación media por categoría: ', rating_medio);
 }
 
-async function UsersSinDigitos() {
-    await client.connect(); // Conexion db
-    const db = client.db(dbName); 
-    const col_productos = db.collection('usuarios'); // Coleccion productos
-
-    const usuarios = await col_productos.find({password: {$not: /\d/ } }).toArray()
-    console.log('Usuarios sin digitos en la contraseña: ', usuarios);
-    await client.close();
+async function UsersSinDigitos(db) {
+    const col_productos = db.collection('usuarios'); // Colección usuarios
+    const usuarios = await col_productos.find({ password: { $not: /\d/ } }).toArray();
+    console.log('Usuarios sin dígitos en la contraseña: ', usuarios);
 }
 
-UsersSinDigitos()
-  .then(() => {
-    console.log('Consulta realizada correctamente.');
-  })
-  .catch((err) => {
-    console.error('Error al ejecutar la consulta:', err);
-  });
+async function main() {
+    const db = await conectarDB(); // Conectar a la base de datos
+
+    try {
+        await Productos100(db);
+        await ProductosWinter(db);
+        await ProductosJoyeria(db);
+        await TotalReseñas(db);
+        await RatingMedio(db);
+        await UsersSinDigitos(db);
+    } catch (error) {
+        console.error("Error al ejecutar las consultas:", error);
+    } finally {
+        await cerrarDB(); // Cerrar la conexión al final
+    }
+}
+
+main();

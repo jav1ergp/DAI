@@ -12,17 +12,14 @@ const dbName = 'myProject';
 async function conectarDB() {
     try {
         await client.connect(); // Conectar a la base de datos
-        console.log('Conexión exitosa a la base de datos.');
         return client.db(dbName);
     } catch (err) {
-        console.error('Error al conectar a la base de datos:', err);
         throw err;
     }
 }
 
 async function cerrarDB() {
     await client.close(); // Cerrar la conexión a la base de datos
-    console.log('Conexión cerrada.');
 }
 
 async function Productos100(db) {

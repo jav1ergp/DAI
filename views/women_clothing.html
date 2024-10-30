@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+{% block contenido %}
+  <h1>Women's Clothing</h1>
+    <div class="row">
+      {% for producto in productos %}
+      <div class="col-md-4">
+        <div class="card" style="width: 18rem;">
+          <img src="{{ producto.image }}" style="max-height:50vh; width: 100%; object-fit: cover;" 
+              class="card-img-top" alt="{{ producto.title }}">
+          <div class="card-body">
+            <h5 class="card-title">{{ producto.title }}</h5>
+            <p class="card-text">{{ producto.description }}</p>
+            <p class="card-text"><strong>Precio: ${{ producto.price }}</strong></p> 
+            <a href="/agregar_carrito/{{ producto._id }}" class="btn btn-primary">Añadir al carrito</a>
+          </div>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+{% endblock %}

@@ -1,7 +1,7 @@
 // tienda.js 
 import express   from "express"
 import nunjucks  from "nunjucks"
-      
+import session from "express-session"
 import connectDB from "./model/db.js"
 connectDB()
 
@@ -17,17 +17,25 @@ nunjucks.configure('views', {         // directorio 'views' para las plantillas 
 })
 app.set('view engine', 'html')
 
+app.use(express.urlencoded({ extended: true }));
+
 app.use(express.static('public'))     // directorio public para archivos
 
-// test para el servidor
-app.get("/hola", (req, res) => {
-  res.render('hola.html');
+app.use(session({
+	secret: 'my-secret',      // a secret string used to sign the session ID cookie
+	resave: false,            // don't save session if unmodified
+	saveUninitialized: false  // don't create session until something stored
+}))
+
+app.use((req, res, next) => {  
+	const carrito = req.session.cart || [];
+	res.locals.carrito_vacio = carrito.length === 0; //variable para comprobar si esta vacio el carrito
+	next();
 });
-
+  
 // Las demas rutas con código en el directorio routes
-//import TiendaRouter from "./routes/router_tienda.js"
-//app.use("/", TiendaRouter);
-
+import TiendaRouter from "./routes/router_tienda.js"
+app.use("/", TiendaRouter);
 
 const PORT = process.env.PORT || 8000;
 app.listen(PORT, () => {

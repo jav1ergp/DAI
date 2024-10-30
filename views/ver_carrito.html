@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+
+{% block contenido %}
+<h1>Tu Carrito</h1>
+
+{% if carrito and carrito|length > 0 %}
+<table class="table">
+  <thead>
+    <tr>
+      <th scope="col">Producto</th>
+      <th scope="col">Descripción</th>
+      <th scope="col">Precio</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for producto in carrito %}
+    <tr>
+      <td>
+        <img src="{{ producto.image }}" alt="{{ producto.title }}" style="width: 100px;">
+      </td>
+      <td>{{ producto.title }}</td>
+      <td>${{ producto.price }}</td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+<div class="d-flex justify-content-end">
+  <h3>Total: ${{ carrito_precio }}</h3>
+</div>
+<div class="d-flex justify-content-end">
+  <a href="/portada" class="btn btn-success me-2">Seguir Comprando</a>
+  <a href="#" class="btn btn-success">Finalizar Compra</a>
+</div>
+{% endif %}
+{% endblock %}

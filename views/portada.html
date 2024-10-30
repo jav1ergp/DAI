@@ -1,0 +1,50 @@
+{% extends 'base.html' %}
+{% block contenido %}
+  <!--<h1>{{ p.title }}</h1> -->
+
+  <div class="row mt-4">
+    <div class="col-md-4">
+      <div class="card" style="width: 100%;">
+        <img src="{{ p.image }}" style="width: 100%; height: 30vh; object-fit: cover;" 
+            class="card-img-top" alt="{{ p.title }}">
+        <div class="card-body">
+          <h5 class="card-title">{{ "Men´s Fashion" }}</h5>
+          <a href="men_clothing" class="btn btn-primary">View items</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-md-4">
+      <div class="card" style="width: 100%;">
+        <img src="{{ p1.image }}" style="width: 100%; height: 30vh; object-fit: cover;" 
+            class="card-img-top" alt="{{ p1.title }}">
+        <div class="card-body">
+          <h5 class="card-title">{{ "Women´s Fashion" }}</h5>
+          <a href="women_clothing" class="btn btn-primary">View items</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-md-4">
+      <div class="card" style="width: 100%;">
+        <img src="{{ p2.image }}" style="width: 100%; height: 30vh; object-fit: cover;" 
+            class="card-img-top" alt="{{ p2.title }}">
+        <div class="card-body">
+          <h5 class="card-title">{{ "Beauty Products" }}</h5>
+          <a href="jewelery" class="btn btn-primary">View items</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-md-4 mt-4">
+      <div class="card" style="width: 100%;">
+        <img src="{{ p3.image }}" style="width: 100%; height: 30vh; object-fit: cover;" 
+            class="card-img-top" alt="{{ p3.title }}">
+        <div class="card-body">
+          <h5 class="card-title">{{ "Electronics" }}</h5>
+          <a href="electronics" class="btn btn-primary">View items</a>
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock %}

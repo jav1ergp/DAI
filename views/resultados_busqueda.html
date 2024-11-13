@@ -13,7 +13,11 @@
             <h5 class="card-title">{{ producto.title }}</h5>
             <p class="card-text">{{ producto.description }}</p>
             <p class="card-text"><strong>Precio: ${{ producto.price }}</strong></p> 
-            <a href="/agregar_carrito/{{ producto._id }}" class="btn btn-primary">Añadir al carrito</a>
+            {% if admin %}
+              <a href="/editar_producto/{{ producto._id }}" class="btn btn-primary">Editar Producto</a>
+            {% else %}
+              <a href="/agregar_carrito/{{ producto._id }}" class="btn btn-primary">Añadir al carrito</a>
+            {% endif %}
           </div>
         </div>
       </div>

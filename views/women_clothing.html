@@ -10,7 +10,12 @@
           <div class="card-body">
             <h5 class="card-title">{{ producto.title }}</h5>
             <p class="card-text">{{ producto.description }}</p>
-            <p class="card-text"><strong>Precio: ${{ producto.price }}</strong></p> 
+            <p class="card-text"><strong>Precio: ${{ producto.price }}</strong></p>
+            <div class="mb-2">
+              <span class="stars" data-_id="{{ producto._id }}"> 
+                Aqui irá el rating de {{ producto._id }}
+              </span>
+            </div>
             {% if admin %}
               <a href="/editar_producto/{{ producto._id }}" class="btn btn-primary">Editar Producto</a>
             {% else %}

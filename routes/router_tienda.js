@@ -88,15 +88,11 @@ router.get('/agregar_carrito/:id', async (req, res)=>{
   try {
     const productId = req.params.id;
     const productos = await Productos.findById(productId);
-    const esAdmin = req.admin;  
 
     if (!req.session.cart) {
       req.session.cart = [];
     }
     
-    if(esAdmin){
-      return res.redirect('/editar_producto')
-    }
     if (productos) {
       req.session.cart.push(productos);
       return res.redirect('/ver_carrito');
@@ -143,7 +139,6 @@ router.post('/guardar_producto/:id', async(req, res) => {
     res.status(500).send({ err });
   }
 });
-
 
 
 router.get('/ver_carrito', async (req, res)=>{

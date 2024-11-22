@@ -21,6 +21,10 @@ app.set('view engine', 'html')
 
 app.use(express.urlencoded({ extended: true }));
 
+app.use(express.json());
+
+app.use(cookieParser());
+
 app.use(express.static('public'))     // directorio public para archivos
 
 app.use(session({
@@ -36,7 +40,7 @@ app.use((req, res, next) => {
 	next();
 });
 
-app.use(cookieParser())
+
 
 // middleware de
 const autentificación = (req, res, next) => {
@@ -55,7 +59,8 @@ import TiendaRouter from "./routes/router_tienda.js"
 app.use("/", TiendaRouter);
 import LoginRouter from "./routes/router_usuarios.js"
 app.use("/", LoginRouter);
-//app.use("/api/ratings", ApiRatingsRouter)
+import ApiRatingsRouter from "./routes/router_api_rating.js"
+app.use("/api/ratings", ApiRatingsRouter)
 
 const PORT = process.env.PORT || 8000;
 app.listen(PORT, () => {

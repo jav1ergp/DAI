@@ -9,10 +9,10 @@ GET http://localhost:8000/api/ratings?desde=5&hasta=10
 GET http://localhost:8000/api/ratings/6719f538fdfbd218f753f044
 
 ### 
-GET http://localhost:8000/api/ratings/67222b256da8cfde4c99aec9
+GET http://localhost:8000/api/ratings/6710d9f4e9e9709c4c2f3be3
 
 ### 
-PUT http://localhost:8000/api/ratings/67222b256da8cfde4c99aec9
+PUT http://localhost:8000/api/ratings/6710d9f4e9e9709c4c2f3be3
 content-type: application/json
 
 {
